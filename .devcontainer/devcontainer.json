@@ -1,0 +1,43 @@
+{
+  "name": "Hardened Python (uv + Compose)",
+
+  // Point to the compose.yaml in the project root and target the 'dev' service
+  "dockerComposeFile": "../compose.yaml",
+  "service": "dev",
+
+  // Match the WORKDIR defined in your Dockerfile and compose.yaml
+  "workspaceFolder": "/workspace",
+
+  // Match the non-root user defined in your Dockerfile
+  "remoteUser": "dev",
+
+  // Cleanly stop the Docker Compose containers when closing VS Code
+  "shutdownAction": "stopCompose",
+
+  // Security hardening: block automatic host SSH agent forwarding
+  "remoteEnv": {
+    "SSH_AUTH_SOCK": ""
+  },
+
+  // Auto-initialize a uv project on first creation if pyproject.toml is missing
+  "postCreateCommand": "test -f pyproject.toml || uv init --no-workspace",
+
+  // Auto-install VS Code extensions and configure Python/Ruff inside the container
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "charliermarsh.ruff"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/home/dev/.venv/bin/python",
+        "python.terminal.activateEnvironment": true,
+        "[python]": {
+          "editor.defaultFormatter": "charliermarsh.ruff",
+          "editor.formatOnSave": true
+        }
+      }
+    }
+  }
+}
+

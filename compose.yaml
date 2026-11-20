@@ -1,0 +1,17 @@
+services:
+  dev:
+    build: .
+    volumes:
+      # Only mount the current project folder—never your host ~/, .ssh, or .aws
+      - .:/workspace:cached
+      # Persist uv's package cache in a named Docker volume for fast rebuilds
+      - uv-cache:/home/dev/.cache/uv
+    # Optional: Drop unnecessary Linux capabilities for extra isolation
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+
+volumes:
+  uv-cache:
+
